@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurante do Vitinho ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        .slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .slideshow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 2;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            animation: zoom 20s infinite;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        @keyframes zoom {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
+            animation: pulse 2s infinite;
+            font-weight: bold;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            font-style: italic;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .restaurant-info {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            opacity: 0.95;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .heart {
+            display: inline-block;
+            color: #ff6b6b;
+            animation: heartbeat 1.5s infinite;
+            font-size: 3.5rem;
+            margin: 20px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 2rem;
+            opacity: 0.6;
+            animation: float-up 15s linear infinite;
+        }
+
+        @keyframes float-up {
+            0% {
+                bottom: -50px;
+                opacity: 0.6;
+            }
+            100% {
+                bottom: 100%;
+                opacity: 0;
+            }
+        }
+
+        .menu-section {
+            padding: 80px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            margin-top: -50px;
+            margin-bottom: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid rgba(255, 215, 0, 0.5);
+        }
+
+        .menu-header h2 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: #ffd700;
+            text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.7);
+        }
+
+        .menu-header p {
+            font-size: 1.3rem;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .menu-item {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            border-left: 5px solid #ffd700;
+            transition: all 0.3s ease;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-item-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .menu-icon {
+            font-size: 3rem;
+            margin-right: 20px;
+        }
+
+        .menu-item h3 {
+            font-size: 2rem;
+            color: #ffd700;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .menu-item-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 15px 0 10px 0;
+            color: #fff;
+        }
+
+        .menu-item-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .category-separator {
+            text-align: center;
+            margin: 60px 0 40px 0;
+            position: relative;
+        }
+
+        .category-separator::before,
+        .category-separator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #ffd700, transparent);
+        }
+
+        .category-separator::before {
+            left: 0;
+        }
+
+        .category-separator::after {
+            right: 0;
+        }
+
+        .category-separator span {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .drinks-section {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 40px 30px;
+            margin-top: 50px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .drinks-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .drink-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .drink-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .drink-icon {
+            font-size: 2.5rem;
+            margin-right: 20px;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .drink-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 1.4rem;
+            font-style: italic;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .footer-heart {
+            font-size: 2rem;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .love-message {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .photo-gallery {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 6px solid rgba(255, 215, 0, 0.6);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            z-index: 100;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .photo-gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            position: absolute;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .photo-gallery img.active {
+            opacity: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #ffd700 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .subtitle { font-size: 1.3rem; }
+            .menu-item h3 { font-size: 1.5rem; }
+            .menu-icon { font-size: 2rem; }
+            .photo-gallery {
+                width: 120px;
+                height: 120px;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <div class="hero">
+        <div class="slideshow" id="heroSlideshow"></div>
+        <div class="hero-content">
+            <h1>🌹 Restaurante do Vitinho 🌹</h1>
+            <div class="heart">❤️</div>
+            <p class="subtitle">Um jantar especial preparado com muito amor para a Thayná</p>
+            <p class="restaurant-info">✨ Cardápio exclusivo para a pessoa mulher mais incrível do Universo ✨</p>
+        </div>
+    </div>
+
+    <div class="menu-section">
+        <div class="menu-header">
+            <h2>Menu Degustação</h2>
+            <p>Uma jornada gastronômica feita especialmente para o amorzinho da minha vida</p>
+        </div>
+
+        <div class="category-separator">
+            <span>🍴 ENTRADA</span>
+        </div>
+
+        <div class="menu-item">
+            <div class="menu-item-header">
+                <div class="menu-icon">🐟</div>
+                <h3>Entrada Especial</h3>
+            </div>
+            <div class="menu-item-name">Iscas de Tilápia Crocante</div>
+            <div class="menu-item-description">
+                Deliciosas iscas de tilápia fresquinha, empanadas na hora e fritas até ficarem douradas e crocantes por fora, macias por dentro. Servidas quentinhas com um toque especial de limão.
+            </div>
+        </div>
+
+        <div class="category-separator">
+            <span>👨‍🍳 PRATO PRINCIPAL</span>
+        </div>
+
+        <div class="menu-item">
+            <div class="menu-item-header">
+                <div class="menu-icon">🍝</div>
+                <h3>Prato do Chef Vitinho</h3>
+            </div>
+            <div class="menu-item-name">Espaguete com Camarões ao Molho Philadelphia</div>
+            <div class="menu-item-description">
+                Espaguete al dente cozido no ponto perfeito, envolvido em um cremoso e irresistível molho Philadelphia. Generosos camarões frescos salteados com ervas finas, criando uma harmonia de sabores. Um prato digno de restaurante cinco estrelas, feito com todo carinho para você.
+            </div>
+        </div>
+
+        <div class="category-separator">
+            <span>🍨 SOBREMESA</span>
+        </div>
+
+        <div class="menu-item">
+            <div class="menu-item-header">
+                <div class="menu-icon">🍫</div>
+                <h3>Final Doce</h3>
+            </div>
+            <div class="menu-item-name">Palha Italiana Premium</div>
+            <div class="menu-item-description">
+                A sobremesa perfeita para fechar nossa noite com chave de ouro! Cremosa, doce na medida certa, com aquele sabor de chocolate que derrete na boca. Uma explosão de felicidade em cada colherada, tão doce quanto você. ❤️
+            </div>
+        </div>
+
+        <div class="drinks-section">
+            <h3 class="drinks-title">🥂 Carta de Bebidas</h3>
+            
+            <div class="drink-item">
+                <div class="drink-icon">🍇</div>
+                <div class="drink-name">Suco de Uva Natural</div>
+            </div>
+
+            <div class="drink-item">
+                <div class="drink-icon">🍊</div>
+                <div class="drink-name">Suco de Laranja</div>
+            </div>
+
+            <div class="drink-item">
+                <div class="drink-icon">💧</div>
+                <div class="drink-name">H2O Limoneto Gelado</div>
+            </div>
+
+            <div class="drink-item">
+                <div class="drink-icon">🍷</div>
+                <div class="drink-name">Vinho Suave</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>
+            <span class="footer-heart">❤️</span>
+            Feito com muito amor pelo seu Palmitinho
+            <span class="footer-heart">❤️</span>
+        </p>
+        <p class="love-message">
+            Porque você merece tudo de mais especial nesse mundo meu amorzinho!
+        </p>
+    </div>
+
+    <div class="photo-gallery" id="photoGallery"></div>
+
+    <script>
+        const images = [
+            'images/IMG_20231210_123059566~COLLAGE.jpg',
+            'images/IMG_20240104_195830046~3.jpg',
+            'images/IMG_20240121_155403383-01.jpeg',
+            'images/IMG_20240121_155409262-01.jpeg',
+            'images/IMG_20240213_211741143.jpg',
+            'images/IMG_20240223_141738832.jpg',
+            'images/IMG_20240223_160240306.jpg',
+            'images/IMG_20240330_150532050.jpg',
+            'images/IMG_20240330_150534329.jpg',
+            'images/IMG_20240330_150554784.jpg',
+            'images/IMG_20240419_214203_958.jpg',
+            'images/IMG_20240419_214944_163.jpg',
+            'images/IMG_20240419_215836_166.jpg',
+            'images/IMG_20240428_204157208.jpg',
+            'images/IMG_20240428_204208851.jpg',
+            'images/IMG_20240518_145110496.jpg',
+            'images/IMG_20240518_145115683.jpg',
+            'images/IMG_20240519_224203873.jpg',
+            'images/IMG_20240830_214825_128.webp',
+            'images/IMG_20240830_215539_158.webp',
+            'images/IMG_20241012_124933348.jpg',
+            'images/IMG_20241123_153100202_HDR.jpg',
+            'images/IMG_20241127_200540876.jpg',
+            'images/IMG_20241127_200541930.jpg',
+            'images/IMG_20241127_204040385~3.jpg',
+            'images/IMG_20241224_184208_476.webp',
+            'images/IMG_20241224_184658_075.webp',
+            'images/IMG_20241224_184728_078.webp',
+            'images/IMG_20250427_192804_818.webp',
+            'images/IMG_20250611_200330_981.webp',
+            'images/IMG_20250611_200429_529.webp',
+            'images/IMG_20250611_201009_248.webp',
+            'images/IMG_20250802_162231_427.webp',
+            'images/IMG_20250817_144425.jpg',
+            'images/IMG_20250817_152102_HDR.jpg',
+            'images/IMG_20250817_152105_HDR.jpg',
+            'images/IMG_20250817_155449.jpg',
+            'images/IMG_20250907_102051_642.webp',
+            'images/IMG_20240427-WA0010.jpeg'
+        ];
+
+        let currentSlide = 0;
+        let currentPhoto = 0;
+
+        const heroSlideshow = document.getElementById('heroSlideshow');
+        const photoGallery = document.getElementById('photoGallery');
+
+        // Criar slides para o hero
+        images.forEach((img, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            slide.style.backgroundImage = `url('${img}')`;
+            if (index === 0) slide.classList.add('active');
+            heroSlideshow.appendChild(slide);
+        });
+
+        // Criar fotos para galeria circular
+        images.forEach((img, index) => {
+            const photo = document.createElement('img');
+            photo.src = img;
+            if (index === 0) photo.classList.add('active');
+            photoGallery.appendChild(photo);
+        });
+
+        // Animação do slideshow
+        function nextSlide() {
+            const slides = document.querySelectorAll('.slideshow .slide');
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        // Animação da galeria
+        function nextPhoto() {
+            const photos = document.querySelectorAll('.photo-gallery img');
+            photos[currentPhoto].classList.remove('active');
+            currentPhoto = (currentPhoto + 1) % photos.length;
+            photos[currentPhoto].classList.add('active');
+        }
+
+        setInterval(nextSlide, 5000);
+        setInterval(nextPhoto, 3000);
+
+        // Criar corações flutuantes
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            document.getElementById('floatingHearts').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 20000);
+        }
+
+        for (let i = 0; i < 15; i++) {
+            createFloatingHeart();
+        }
+
+        setInterval(createFloatingHeart, 3000);
+    </script>
+</body>
+</html>
